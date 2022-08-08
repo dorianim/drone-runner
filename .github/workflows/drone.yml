@@ -15,7 +15,7 @@ jobs:
         sudo cp drone-runner-exec /usr/local/bin
         
         sudo mkdir -p /etc/drone-runner-exec ~/.drone-runner-exec
-        sudo bash -c "echo 'DRONE_RPC_PROTO=https\nDRONE_RPC_HOST=${secrets.DRONE_RPC_HOST}\nDRONE_RPC_SECRET=${secrets.DRONE_RPC_SECRET}' > /etc/drone-runner-exec/config
+        sudo bash -c "echo 'DRONE_RPC_PROTO=https\nDRONE_RPC_HOST=${secrets.DRONE_RPC_HOST}\nDRONE_RPC_SECRET=${secrets.DRONE_RPC_SECRET}' > /etc/drone-runner-exec/config"
         cat /etc/drone-runner-exec/config
         
         sudo cp /etc/drone-runner-exec/config ~/.drone-runner-exec/config
