@@ -14,8 +14,8 @@ jobs:
         curl -L https://github.com/drone-runners/drone-runner-exec/releases/latest/download/drone_runner_exec_darwin_amd64.tar.gz | tar zx
         sudo cp drone-runner-exec /usr/local/bin
         
-        sudo mkdir -p /etc/drone-runner-exec ~/.drone-runner-exec
-        echo "DRONE_RPC_PROTO=https\nDRONE_RPC_HOST=${secrets.DRONE_RPC_HOST}\nDRONE_RPC_SECRET=${secrets.DRONE_RPC_SECRET}" | sudo tee /etc/drone-runner-exec/config
+        sudo mkdir -p /etc/drone-runner-exec ~/.drone-runner-exec /var/log/drone-runner-exec
+        echo "DRONE_RPC_PROTO=https\nDRONE_RPC_HOST=${secrets.DRONE_RPC_HOST}\nDRONE_RPC_SECRET=${secrets.DRONE_RPC_SECRET}\nDRONE_LOG_FILE=/var/log/drone-runner-exec/log.txt" | sudo tee /etc/drone-runner-exec/config
         
         sudo cp /etc/drone-runner-exec/config ~/.drone-runner-exec/config
         
@@ -23,4 +23,5 @@ jobs:
         
     - name: start runner
       run: |
-        sudo bash -c 'drone-runner-exec service start'
+        sudo drone-runner-exec service start
+        sudo tail -f /var/log/drone-runner-exec/log.txt
