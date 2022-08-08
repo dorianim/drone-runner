@@ -1,0 +1,26 @@
+name: "Run drone exec runner"
+
+on:
+  workflow_dispatch:
+  
+jobs:
+  run-runner:
+    name: Run runner
+    runs-on: macos-latest
+    
+    steps:
+    - name: install runner
+      run: |
+        curl -L https://github.com/drone-runners/drone-runner-exec/releases/latest/download/drone_runner_exec_darwin_amd64.tar.gz | tar zx
+        sudo cp drone-runner-exec /usr/local/bin
+        
+        mkdir -p /etc/drone-runner-exec ~/.drone-runner-exec
+        echo "DRONE_RPC_PROTO=https\nDRONE_RPC_HOST=${secrets.DRONE_RPC_HOST}\nDRONE_RPC_SECRET=${secrets.DRONE_RPC_SECRET}" > /etc/drone-runner-exec/config
+        
+        cp /etc/drone-runner-exec/config ~/.drone-runner-exec/config
+        
+        drone-runner-exec service install
+        
+    - name: start runner
+      run: |
+        drone-runner-exec service start
